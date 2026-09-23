@@ -70,10 +70,40 @@ export default function BottonsLanding() {
         <div className="hero-copy"><div className="eyebrow"><span className="short-line" /> +5.000 ARTES + CURSO + FERRAMENTAS</div>
           <h1>TRANSFORME SUA MÁQUINA DE BOTTONS EM UMA <span>FÁBRICA DE PERSONALIZADOS.</span></h1>
           <p className="hero-description">Você já tem a máquina. Agora tenha uma biblioteca com milhares de artes, treinamento e ferramentas para escolher o nicho, personalizar, precificar e colocar seus produtos para rodar. <strong>Sem começar cada pedido do zero.</strong></p>
+
+          <div className="hero-deliverable hero-deliverable-mobile" aria-roledescription="carrossel" aria-label="Prévias da biblioteca de artes">
+            <div
+              className="hero-deliverable-stage"
+              onTouchStart={e => { touchStart.current = e.touches[0].clientX; }}
+              onTouchEnd={e => {
+                if (touchStart.current !== null) {
+                  const diff = e.changedTouches[0].clientX - touchStart.current;
+                  if (Math.abs(diff) > 40) changeSlide(diff < 0 ? 1 : -1);
+                  touchStart.current = null;
+                }
+              }}
+            >
+              <Image
+                src={'/images/bottons/slide-' + (slide + 1) + '.webp'}
+                width={700}
+                height={900}
+                alt={'Prévia ' + (slide + 1) + ' da biblioteca com artes para bottons e ímãs'}
+                priority={slide === 0}
+                sizes="calc(100vw - 36px)"
+                className="hero-deliverable-image"
+              />
+              <button className="hero-deliverable-arrow hero-deliverable-prev" onClick={() => changeSlide(-1)} aria-label="Arte anterior"><ArrowLeft size={22} /></button>
+              <button className="hero-deliverable-arrow hero-deliverable-next" onClick={() => changeSlide(1)} aria-label="Próxima arte"><ArrowRight size={22} /></button>
+            </div>
+            <div className="hero-deliverable-dots" aria-label="Selecionar prévia">
+              {Array.from({length:8},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}
+            </div>
+          </div>
+
           <div className="hero-chips"><span><Check size={15} /> +5.000 artes</span><span><Check size={15} /> Canva Grátis</span><span><Check size={15} /> Curso incluso no PRO</span></div>
           <CTA>QUERO COLOCAR MINHA MÁQUINA PARA PRODUZIR</CTA><p className="micro hero-price">Planos a partir de <strong>{money(offer.basic.price)}</strong><span>•</span>{offer.guaranteeDays} dias de garantia</p>
         </div>
-        <div className="hero-deliverable" aria-roledescription="carrossel" aria-label="Prévias da biblioteca de artes">
+        <div className="hero-deliverable hero-deliverable-desktop" aria-roledescription="carrossel" aria-label="Prévias da biblioteca de artes">
           <div
             className="hero-deliverable-stage"
             onTouchStart={e => { touchStart.current = e.touches[0].clientX; }}
