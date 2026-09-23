@@ -46,7 +46,7 @@ export default function BottonsLanding() {
 
   useEffect(() => {
     const timer = window.setInterval(() => setSlide(current => (current + 1) % 8), 4200);
-    const revealTargets = Array.from(document.querySelectorAll<HTMLElement>('section .container, .hero-copy, .art-carousel, .format-content, .plan, .guarantee > *, .final-section .container'));
+    const revealTargets = Array.from(document.querySelectorAll<HTMLElement>('section .container, .hero-copy, .hero-deliverable, .format-content, .plan, .guarantee > *, .final-section .container'));
     revealTargets.forEach(el => el.classList.add('reveal'));
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
@@ -73,13 +73,33 @@ export default function BottonsLanding() {
           <div className="hero-chips"><span><Check size={15} /> +5.000 artes</span><span><Check size={15} /> Canva Grátis</span><span><Check size={15} /> Curso incluso no PRO</span></div>
           <CTA>QUERO COLOCAR MINHA MÁQUINA PARA PRODUZIR</CTA><p className="micro hero-price">Planos a partir de <strong>{money(offer.basic.price)}</strong><span>•</span>{offer.guaranteeDays} dias de garantia</p>
         </div>
-        <div className="art-carousel" aria-roledescription="carrossel" aria-label="Prévias das artes do pacote">
-          <div className="art-carousel-top"><span>UMA AMOSTRA DA BIBLIOTECA 5K</span><strong>{String(slide + 1).padStart(2, '0')} / 08</strong></div>
-          <div className="art-carousel-image" onTouchStart={e => { touchStart.current = e.touches[0].clientX; }} onTouchEnd={e => { if (touchStart.current !== null) { const diff = e.changedTouches[0].clientX - touchStart.current; if (Math.abs(diff) > 40) changeSlide(diff < 0 ? 1 : -1); touchStart.current = null; } }}>
-            <Image src={'/images/bottons/slide-' + (slide + 1) + '.webp'} width={700} height={900} alt={'Prévia ' + (slide + 1) + ' das artes digitais para bottons e ímãs no Canva'} priority={slide === 0} sizes="(max-width: 800px) 100vw, 50vw" />
+        <div className="hero-deliverable" aria-roledescription="carrossel" aria-label="Prévias da biblioteca de artes">
+          <div
+            className="hero-deliverable-stage"
+            onTouchStart={e => { touchStart.current = e.touches[0].clientX; }}
+            onTouchEnd={e => {
+              if (touchStart.current !== null) {
+                const diff = e.changedTouches[0].clientX - touchStart.current;
+                if (Math.abs(diff) > 40) changeSlide(diff < 0 ? 1 : -1);
+                touchStart.current = null;
+              }
+            }}
+          >
+            <Image
+              src={'/images/bottons/slide-' + (slide + 1) + '.webp'}
+              width={700}
+              height={900}
+              alt={'Prévia ' + (slide + 1) + ' da biblioteca com artes para bottons e ímãs'}
+              priority={slide === 0}
+              sizes="(max-width: 800px) calc(100vw - 36px), 520px"
+              className="hero-deliverable-image"
+            />
+            <button className="hero-deliverable-arrow hero-deliverable-prev" onClick={() => changeSlide(-1)} aria-label="Arte anterior"><ArrowLeft size={22} /></button>
+            <button className="hero-deliverable-arrow hero-deliverable-next" onClick={() => changeSlide(1)} aria-label="Próxima arte"><ArrowRight size={22} /></button>
           </div>
-          <div className="carousel-controls"><button onClick={() => changeSlide(-1)} aria-label="Arte anterior"><ArrowLeft size={21} /></button><div className="carousel-dots">{Array.from({length:8},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}</div><button onClick={() => changeSlide(1)} aria-label="Próxima arte"><ArrowRight size={21} /></button></div>
-          <p className="caption">Você recebe artes digitais. Bottons, ímãs físicos e equipamentos não estão incluídos.</p>
+          <div className="hero-deliverable-dots" aria-label="Selecionar prévia">
+            {Array.from({length:8},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}
+          </div>
         </div>
       </section>
       <div className="format-strip"><div className="container format-content"><span>+5.000 ARTES · QUATRO TAMANHOS</span><div>3,2<i />3,8<i />4,4<i />5,8 <small>cm</small></div><p>Escolha. Edite. Produza.</p></div></div>
