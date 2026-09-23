@@ -1,0 +1,92 @@
+.calculator {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid #dce5f2;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 18px 60px rgb(36 63 108 / 6%);
+  color: #12213a;
+  font-family: inherit;
+}
+
+.inputsPanel { padding: 32px; }
+.panelHeader { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.eyebrow { display: block; color: #2563eb; font-size: 10px; font-weight: 750; letter-spacing: .13em; }
+.heading { margin: 8px 0 0; font-size: 23px; line-height: 1.3; font-weight: 700; letter-spacing: -.035em; }
+.exampleBadge { flex-shrink: 0; padding: 7px 10px; border: 1px solid #dce7ff; border-radius: 6px; color: #2559b8; background: #f0f5ff; font-size: 10px; font-weight: 600; }
+.helper { margin: 13px 0 23px; color: #627087; font-size: 12px; line-height: 1.65; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 18px; }
+.field { min-width: 0; }
+.field label { display: block; margin-bottom: 7px; color: #34435a; font-size: 12px; font-weight: 550; line-height: 1.4; }
+.inputWrap { position: relative; display: flex; align-items: center; border: 1px solid #dce3ed; border-radius: 8px; background: #fafbfd; transition: border-color .15s, box-shadow .15s; }
+.inputWrap:focus-within { border-color: #2563eb; box-shadow: 0 0 0 3px rgb(37 99 235 / 12%); }
+.inputWrap input { width: 100%; min-width: 0; height: 43px; padding: 10px 45px 10px 13px; border: 0; border-radius: inherit; outline: none; background: transparent; color: #14233b; font: inherit; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.unit { position: absolute; right: 12px; color: #7a879b; font-size: 11px; pointer-events: none; }
+.invalid { border-color: #be3441; }
+.invalid:focus-within { border-color: #be3441; box-shadow: 0 0 0 3px rgb(190 52 65 / 10%); }
+.fieldError { display: block; margin-top: 5px; color: #ad2338; font-size: 11px; line-height: 1.4; }
+.marginNote { display: flex; align-items: center; gap: 8px; padding-top: 18px; color: #697890; font-size: 11px; line-height: 1.5; }
+.noteIcon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 16px; height: 16px; border: 1px solid #a6b4c9; border-radius: 50%; font-size: 10px; font-weight: 600; }
+.generalError { margin: 16px 0 0; color: #ad2338; font-size: 12px; line-height: 1.5; }
+.resetButton { margin-top: 19px; padding: 4px 0; border: 0; background: transparent; color: #506b9c; font: inherit; font-size: 11px; font-weight: 550; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.resetButton:hover { color: #2563eb; }
+.resetButton:focus-visible { outline: 2px solid #2563eb; outline-offset: 4px; border-radius: 2px; }
+.resultPanel { position: relative; display: flex; flex-direction: column; padding: 34px 32px 29px; background: #2563eb; color: #fff; }
+.resultTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.resultEyebrow { color: #dce8ff; font-size: 10px; font-weight: 650; letter-spacing: .13em; }
+.liveBadge { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border: 1px solid rgb(255 255 255 / 24%); border-radius: 30px; color: #eef4ff; font-size: 9px; white-space: nowrap; }
+.liveBadge > span { width: 5px; height: 5px; border-radius: 50%; background: #8ff0be; }
+.priceBlock { display: flex; flex-direction: column; margin-top: 45px; }
+.priceLabel { font-size: 13px; color: #e0eaff; }
+.price { margin: 10px 0 11px; font-size: clamp(35px, 4vw, 55px); font-weight: 700; line-height: 1.1; letter-spacing: -.055em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.priceCaption { color: #dae6ff; font-size: 11px; line-height: 1.6; }
+.breakdown { display: grid; gap: 15px; margin: 31px 0 0; padding: 24px 0; border-top: 1px solid rgb(255 255 255 / 23%); border-bottom: 1px solid rgb(255 255 255 / 23%); font-size: 12px; }
+.breakdown > div { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+.breakdown dt { color: #e0eaff; }
+.breakdown dd { margin: 0; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.profit dt { color: #fff; font-weight: 600; }
+.profit dd { font-size: 20px; letter-spacing: -.025em; }
+.formula { display: flex; align-items: flex-start; gap: 10px; margin-top: 25px; }
+.formulaIcon { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; width: 27px; height: 27px; border-radius: 7px; background: rgb(255 255 255 / 13%); }
+.formula p { margin: 0; color: #e4edff; font-size: 11px; line-height: 1.65; }
+.disclaimer { margin: auto 0 0; padding-top: 28px; color: #d7e4ff; font-size: 10px; line-height: 1.75; }
+
+@media (max-width: 900px) {
+  .inputsPanel { padding: 25px; }
+  .panelHeader { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .resultPanel { padding: 28px 24px; }
+  .resultTop { align-items: flex-start; flex-direction: column; }
+  .heading { font-size: 21px; }
+}
+
+@media (max-width: 680px) {
+  .calculator { grid-template-columns: minmax(0, 1fr); border-radius: 18px; }
+  .inputsPanel { padding: 25px 20px; }
+  .panelHeader { flex-direction: row; align-items: center; gap: 8px; }
+  .exampleBadge { font-size: 9px; padding: 6px; }
+  .heading { font-size: 20px; }
+  .fields { gap: 17px 12px; }
+  .field label { font-size: 11px; }
+  .inputWrap input { font-size: 16px; }
+  .resultPanel { padding: 27px 24px; }
+  .resultTop { flex-direction: row; align-items: center; }
+  .priceBlock { margin-top: 29px; }
+  .price { font-size: 48px; }
+  .breakdown { margin-top: 25px; }
+  .disclaimer { padding-top: 24px; }
+}
+
+@media (max-width: 360px) {
+  .panelHeader { flex-direction: column; align-items: flex-start; }
+  .fields { grid-template-columns: minmax(0, 1fr); }
+  .marginNote { padding-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inputWrap { transition: none; }
+}
+
+/* BOTTONS PRO 5K — dark premium overrides */
+.calculator{border-color:#26354a;background:#0b111a;box-shadow:0 24px 70px rgb(0 0 0 / 35%);color:#eef6ff}
+.inputsPanel{background:#0b111a}.eyebrow{color:#39bfff}.heading{color:#fff}.exampleBadge{border-color:#24415b;color:#8ad7ff;background:#0c1e2d}.helper{color:#889bb2}.field label{color:#b7c4d3}.inputWrap{border-color:#263649;background:#0f1722}.inputWrap:focus-within{border-color:#25b4ff;box-shadow:0 0 0 3px rgb(37 180 255 / 12%)}.inputWrap input{color:#f6fbff}.unit{color:#8091a5}.marginNote{color:#74889f}.noteIcon{border-color:#496078}.resetButton{color:#67cfff}.resetButton:hover{color:#a1e5ff}.resultPanel{background:linear-gradient(150deg,#0b87d7,#075eac 62%,#073f78)}.resultEyebrow{color:#c9efff}.resultPanel .priceLabel,.breakdown dt,.formula p,.disclaimer,.priceCaption{color:#d8efff}.formulaIcon{background:rgb(255 255 255 / 14%)}
