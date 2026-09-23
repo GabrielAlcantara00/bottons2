@@ -139,3 +139,12 @@ h1 span,h2 span{color:#24b3ff}
   .bottons-hero .hero-chips span{font-size:8px;padding:6px 7px}
   .hero-deliverable-arrow{width:38px;height:38px}
 }
+
+/* Hero deliverable placement: desktop beside the copy, mobile below the hero description. */
+.hero-deliverable-mobile{display:none}
+.hero-deliverable-desktop{display:block}
+@media(max-width:800px){
+  .hero-deliverable-mobile{display:block;width:100%;max-width:520px;margin:20px auto 4px}
+  .hero-deliverable-desktop{display:none}
+  .bottons-hero .hero-deliverable-mobile + .hero-chips{margin-top:17px}
+}
