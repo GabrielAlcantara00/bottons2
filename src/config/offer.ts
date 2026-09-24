@@ -3,9 +3,9 @@
 export const offer = {
   brand: 'Bottons Pro 5K',
   guaranteeDays: 30,
-  basic: { price: 10, checkout: 'https://ggcheckout.app/checkout/v5/hP4KHlfuZ0PReMGM5Ets' },
-  complete: { price: 27, checkout: 'https://ggcheckout.app/checkout/v5/vSVfQvQfDpfeQlIKSmf0' },
-  upgrade: { price: 19.9, checkout: 'https://ggcheckout.app/checkout/v5/NbBS5H7FyEpG2X7D9t2v' },
+  basic: { price: 10, checkout: 'https://ggcheckout.app/checkout/v5/raEUnLUyo72vUVuPhOK4' },
+  complete: { price: 27, checkout: 'https://ggcheckout.app/checkout/v5/TDxfHd8kmZ4PlsnFlojp' },
+  upgrade: { price: 19.9, checkout: 'https://ggcheckout.app/checkout/v5/pNuGw8mfECjW55BF6djb' },
 };
 export const money = (v: number) => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 export function checkoutUrl(base: string) {
