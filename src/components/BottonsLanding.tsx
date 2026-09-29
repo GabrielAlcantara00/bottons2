@@ -11,6 +11,15 @@ const bonuses = [
   { title: '50 Artes Profissões', image: 'bonus-profissoes.webp', text: 'Ideias para profissões, lembranças corporativas e formaturas.' },
   { title: 'Crie artes com ChatGPT', image: 'bonus-chatgpt.webp', text: 'Aprenda a usar IA para desenvolver ideias e frases para suas artes.' },
 ];
+
+const socialProof = [
+  { image: '/images/bottons/social/01-bts-atelie.webp', label: 'Foto real de cliente', theme: 'K-pop / BTS', text: 'Boa definição, cores fortes e acabamento bem limpo no produto pronto.' },
+  { image: '/images/bottons/social/02-bts-sala.webp', label: 'Foto real de cliente', theme: 'K-pop / BTS', text: 'Uma mesma coleção rende várias opções para montar kits e atender o mesmo nicho.' },
+  { image: '/images/bottons/social/03-religioso-cozinha.webp', label: 'Foto real de cliente', theme: 'Religioso', text: 'Arte com bastante detalhe e um resultado bonito mesmo em um formato pequeno.' },
+  { image: '/images/bottons/social/04-religioso-varanda.webp', label: 'Foto real de cliente', theme: 'Religioso', text: 'Impressão nítida e acabamento brilhante para lembranças e eventos.' },
+  { image: '/images/bottons/social/05-anime-quarto.webp', label: 'Foto real de cliente', theme: 'Anime', text: 'Cores vivas e arte bem definida para um tema que chama atenção rápido.' },
+  { image: '/images/bottons/social/06-anime-jantar.webp', label: 'Foto real de cliente', theme: 'Anime', text: 'Resultado final com aparência profissional e pronto para fotografar e divulgar.' },
+];
 const benefits = [
   { icon: FolderOpen, title: '+5.000 artes prontas', text: 'Uma biblioteca premium para bottons e ímãs, organizada por temas para você encontrar opções rápido.' },
   { icon: Palette, title: 'Edite no Canva Grátis', text: 'Personalize textos, cores e detalhes sem depender de designer ou começar cada pedido do zero.' },
@@ -159,6 +168,34 @@ export default function BottonsLanding() {
       <section className="section pale-section" id="calculadora"><div className="container"><div className="section-top"><div><p className="eyebrow">FERRAMENTA PRÁTICA</p><h2>DESCUBRA QUANTO CUSTA<br /><span>O SEU BOTTON OU ÍMÃ.</span></h2></div><p>Use uma simulação simples para visualizar custo, taxas e margem antes de decidir seu preço.</p></div><PriceCalculator /></div></section>
 
       <section className="section container"><div className="center-title"><p className="eyebrow">BÔNUS DO PLANO COMPLETO</p><h2>MAIS TEMAS PARA<br /><span>AMPLIAR SUA VITRINE.</span></h2><p>Coleções extras e material de criação para você testar novas ideias sem comprar pack separado.</p></div><div className="bonus-grid">{bonuses.map((b,i) => <article className="bonus-card" key={b.title}><div className="bonus-image"><Image src={'/images/bottons/'+b.image} width={600} height={600} alt={b.title+' — bônus do pacote de artes para bottons e ímãs'} sizes="(max-width:540px) 45vw, 25vw" /><span>BÔNUS 0{i+1}</span></div><div className="bonus-copy"><h3>{b.title}</h3><p>{b.text}</p><span className="included"><Check size={16} /> INCLUÍDO NO COMPLETO</span></div></article>)}</div><div className="bundle-summary"><div><Gift size={28} /><strong>TUDO NO MESMO ACESSO</strong></div><p>+5.000 artes + 150 artes temáticas bônus + curso, calculadora e guia de vendas.</p></div></section>
+
+      <section className="section social-proof-section" aria-labelledby="social-proof-title">
+        <div className="container">
+          <div className="center-title social-proof-heading">
+            <p className="eyebrow">RESULTADOS REAIS</p>
+            <h2 id="social-proof-title">VEJA COMO AS ARTES<br /><span>FICAM NO PRODUTO PRONTO.</span></h2>
+            <p>Fotos reais de clientes produzindo bottons com diferentes temas e estilos.</p>
+          </div>
+        </div>
+        <div className="social-proof-marquee" aria-label="Galeria de resultados de clientes">
+          <div className="social-proof-track">
+            {[...socialProof, ...socialProof].map((item, index) => (
+              <article className="social-proof-card" key={item.image + index} aria-hidden={index >= socialProof.length ? true : undefined}>
+                <div className="social-proof-image">
+                  <Image src={item.image} width={1080} height={1350} alt={index < socialProof.length ? `Resultado real de cliente — ${item.theme}` : ''} sizes="(max-width:540px) 78vw, (max-width:900px) 42vw, 310px" />
+                  <span>{item.label}</span>
+                </div>
+                <div className="social-proof-copy">
+                  <div className="social-proof-stars" aria-label="Destaque do resultado">★★★★★</div>
+                  <p className="social-proof-theme">{item.theme}</p>
+                  <p>{item.text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+        <p className="social-proof-note">As frases acima descrevem os resultados mostrados nas fotos. Substitua por feedbacks literais dos clientes quando você tiver as mensagens originais.</p>
+      </section>
 
       <section className="section plans-section" id="planos"><div className="container"><div className="center-title"><p className="eyebrow">ESCOLHA O SEU PLANO</p><h2>COMECE PELO STARTER<br /><span>OU LEVE O SISTEMA COMPLETO.</span></h2><p>Pagamento único. Sem mensalidade. {offer.guaranteeDays} dias de garantia.</p></div><div className="plan-grid">
         <article className="plan starter"><p className="plan-kicker">STARTER</p><h3>PACK REDUZIDO</h3><p className="plan-description">Para conhecer uma parte do material e começar pelo essencial.</p><div className="plan-price"><strong>{money(offer.basic.price)}</strong></div><p className="micro">pagamento único</p><Checks items={['Pack reduzido de artes','Artes editáveis no Canva Grátis','Acesso digital','Garantia de 30 dias']} /><ul className="not-included"><li><X size={16} /> Sem biblioteca completa de +5.000 artes</li><li><X size={16} /> Sem Curso Bottons do Zero</li><li><X size={16} /> Sem Calculadora e Guia</li><li><X size={16} /> Sem bônus e atualizações</li></ul><button className="button button-outline" onClick={() => modal.current?.showModal()}>COMEÇAR PELO STARTER<ArrowRight size={18} /></button><span className="secure"><ShieldCheck size={14} /> Compra em checkout externo</span></article>
