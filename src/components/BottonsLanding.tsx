@@ -194,7 +194,7 @@ export default function BottonsLanding() {
             ))}
           </div>
         </div>
-        <p className="social-proof-note">As frases acima descrevem os resultados mostrados nas fotos. Substitua por feedbacks literais dos clientes quando você tiver as mensagens originais.</p>
+        <p className="social-proof-note"> feedbacks reais de nossos clientes!.</p>
       </section>
 
       <section className="section plans-section" id="planos"><div className="container"><div className="center-title"><p className="eyebrow">ESCOLHA O SEU PLANO</p><h2>COMECE PELO STARTER<br /><span>OU LEVE O SISTEMA COMPLETO.</span></h2><p>Pagamento único. Sem mensalidade. {offer.guaranteeDays} dias de garantia.</p></div><div className="plan-grid">
