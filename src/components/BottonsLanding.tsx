@@ -177,24 +177,34 @@ export default function BottonsLanding() {
             <p>Fotos reais de clientes produzindo bottons com diferentes temas e estilos.</p>
           </div>
         </div>
-        <div className="social-proof-marquee" aria-label="Galeria de resultados de clientes">
-          <div className="social-proof-track">
-            {[...socialProof, ...socialProof].map((item, index) => (
-              <article className="social-proof-card" key={item.image + index} aria-hidden={index >= socialProof.length ? true : undefined}>
-                <div className="social-proof-image">
-                  <Image src={item.image} width={1080} height={1350} alt={index < socialProof.length ? `Resultado real de cliente — ${item.theme}` : ''} sizes="(max-width:540px) 78vw, (max-width:900px) 42vw, 310px" />
-                  <span>{item.label}</span>
-                </div>
-                <div className="social-proof-copy">
-                  <div className="social-proof-stars" aria-label="Destaque do resultado">★★★★★</div>
-                  <p className="social-proof-theme">{item.theme}</p>
-                  <p>{item.text}</p>
-                </div>
-              </article>
-            ))}
-          </div>
+        <div className="social-proof-vertical" aria-label="Galeria de resultados de clientes">
+          {[socialProof.filter((_, i) => i % 2 === 0), socialProof.filter((_, i) => i % 2 === 1)].map((lane, laneIndex) => (
+            <div className={`social-proof-lane ${laneIndex === 1 ? 'is-reverse' : ''}`} key={laneIndex}>
+              <div className="social-proof-lane-track">
+                {[...lane, ...lane].map((item, index) => (
+                  <article className="social-proof-card" key={`${item.image}-${laneIndex}-${index}`} aria-hidden={index >= lane.length ? true : undefined}>
+                    <div className="social-proof-image">
+                      <Image
+                        src={item.image}
+                        width={1080}
+                        height={1350}
+                        alt={index < lane.length ? `Resultado real de cliente — ${item.theme}` : ''}
+                        sizes="(max-width:540px) 44vw, 320px"
+                      />
+                      <span>{item.label}</span>
+                    </div>
+                    <div className="social-proof-copy">
+                      <div className="social-proof-stars" aria-label="Destaque do resultado">★★★★★</div>
+                      <p className="social-proof-theme">{item.theme}</p>
+                      <p>{item.text}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
-        <p className="social-proof-note"> feedbacks reais de nossos clientes!.</p>
+        <p className="social-proof-note"> Todos bottons acima estao incluso no pack completo.</p>
       </section>
 
       <section className="section plans-section" id="planos"><div className="container"><div className="center-title"><p className="eyebrow">ESCOLHA O SEU PLANO</p><h2>COMECE PELO STARTER<br /><span>OU LEVE O SISTEMA COMPLETO.</span></h2><p>Pagamento único. Sem mensalidade. {offer.guaranteeDays} dias de garantia.</p></div><div className="plan-grid">
