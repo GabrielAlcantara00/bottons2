@@ -10,12 +10,12 @@ export const offer = {
   },
 
   complete: {
-    price: 19.9,
+    price: 27.0,
     checkout: 'https://ggcheckout.app/checkout/v5/TDxfHd8kmZ4PlsnFlojp'
   },
 
   upgrade: {
-    price: 14.9,
+    price: 19.9,
     checkout: 'https://ggcheckout.app/checkout/v5/pNuGw8mfECjW55BF6djb'
   },
 };
