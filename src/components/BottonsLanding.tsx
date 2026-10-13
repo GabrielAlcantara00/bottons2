@@ -48,6 +48,7 @@ export default function BottonsLanding() {
   const [slide, setSlide] = useState(0);
   const [faq, setFaq] = useState<number | null>(0);
   const [sticky, setSticky] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const modal = useRef<HTMLDialogElement>(null);
   const touchStart = useRef<number | null>(null);
   function changeSlide(direction: number) { setSlide(current => (current + direction + 8) % 8); }
@@ -61,12 +62,20 @@ export default function BottonsLanding() {
       entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     revealTargets.forEach(el => observer.observe(el));
-    const onScroll = () => setSticky(window.scrollY > 760);
+    const onScroll = () => {
+      setSticky(window.scrollY > 760);
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollable > 0 ? Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100)) : 0;
+      setScrollProgress(progress);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => { window.clearInterval(timer); observer.disconnect(); window.removeEventListener('scroll', onScroll); };
   }, []);
   return <>
+    <div className="scroll-progress" aria-hidden="true">
+      <span className="scroll-progress-bar" style={{ transform: `scaleX(${scrollProgress / 100})` }} />
+    </div>
     <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
     <div className="announcement"><span>OPORTUNIDADE COM BOTTONS E ÍMÃS PERSONALIZADOS</span><span className="announcement-sep">/</span><span>PAGAMENTO ÚNICO · ACESSO IMEDIATO</span></div>
     <header className="header container">
