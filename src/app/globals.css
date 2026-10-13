@@ -170,3 +170,34 @@ h1 span,h2 span{color:#24b3ff}
 @media(prefers-reduced-motion:reduce){.social-proof-lane-track{animation:none}.social-proof-vertical{height:auto;max-height:none;overflow-x:auto;overflow-y:hidden;display:flex;mask-image:none;-webkit-mask-image:none}.social-proof-lane{overflow:visible;display:contents}.social-proof-lane-track{display:flex;flex-direction:row}.social-proof-card{flex:0 0 280px}}
 @media(max-width:800px){.social-proof-section{padding-block:64px 58px}.social-proof-vertical{width:min(560px,calc(100% - 24px));height:690px;gap:12px}.social-proof-lane-track{gap:12px;animation-duration:28s}.social-proof-lane.is-reverse .social-proof-lane-track{animation-duration:31s}.social-proof-card{border-radius:15px}.social-proof-copy{padding:13px 13px 15px}.social-proof-theme{font-size:13px}.social-proof-copy>p:last-child{font-size:10.5px}}
 @media(max-width:540px){.social-proof-section{padding-block:55px 48px}.social-proof-heading{margin-bottom:22px}.social-proof-vertical{width:calc(100% - 28px);height:650px;gap:10px}.social-proof-lane-track{gap:10px;animation-duration:24s}.social-proof-lane.is-reverse .social-proof-lane-track{animation-duration:27s}.social-proof-card{border-radius:13px}.social-proof-image>span{left:8px;bottom:8px;padding:5px 7px;font-size:6.8px}.social-proof-copy{padding:11px 11px 13px}.social-proof-stars{font-size:10px}.social-proof-theme{font-size:12px}.social-proof-copy>p:last-child{font-size:9.7px;line-height:1.5}.social-proof-note{font-size:8.5px;margin-top:12px}}
+
+
+/* ============================================================
+   BARRA DE PROGRESSO DA PÁGINA
+   ============================================================ */
+.scroll-progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:4px;
+  z-index:9999;
+  background:rgba(255,255,255,.08);
+  pointer-events:none;
+}
+.scroll-progress-bar{
+  display:block;
+  width:100%;
+  height:100%;
+  transform:scaleX(0);
+  transform-origin:left center;
+  background:linear-gradient(90deg,#19b8ff 0%,#168cff 50%,#6fd8ff 100%);
+  box-shadow:0 0 10px rgba(25,184,255,.75),0 0 22px rgba(25,184,255,.35);
+  will-change:transform;
+}
+@media(max-width:540px){
+  .scroll-progress{height:3px}
+}
+@media(prefers-reduced-motion:reduce){
+  .scroll-progress-bar{transition:none}
+}
