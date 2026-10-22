@@ -5,6 +5,8 @@ import { ArrowRight, ArrowLeft, Check, X, ScanLine, FolderOpen, Layers, Graduati
 import PriceCalculator from './PriceCalculator';
 import { offer, money, checkoutUrl } from '@/config/offer';
 
+const HERO_SLIDE_COUNT = 12;
+
 const bonuses = [
   { title: '50 Artes Cristãs', image: 'bonus-cristas.webp', text: 'Temas cristãos e inspiracionais para eventos, retiros e presentes.' },
   { title: '50 Artes Gamer', image: 'bonus-gamer.webp', text: 'Mais opções para o público gamer e suas personalizações.' },
@@ -73,11 +75,11 @@ export default function BottonsLanding() {
   const [sticky, setSticky] = useState(false);
   const modal = useRef<HTMLDialogElement>(null);
   const touchStart = useRef<number | null>(null);
-  function changeSlide(direction: number) { setSlide(current => (current + direction + 8) % 8); }
+  function changeSlide(direction: number) { setSlide(current => (current + direction + HERO_SLIDE_COUNT) % HERO_SLIDE_COUNT); }
   function closeModal() { modal.current?.close(); }
 
   useEffect(() => {
-    const timer = window.setInterval(() => setSlide(current => (current + 1) % 8), 4200);
+    const timer = window.setInterval(() => setSlide(current => (current + 1) % HERO_SLIDE_COUNT), 4200);
     const revealTargets = Array.from(document.querySelectorAll<HTMLElement>('section .container, .hero-copy, .hero-deliverable, .format-content, .plan, .guarantee > *, .final-section .container'));
     revealTargets.forEach(el => el.classList.add('reveal'));
     const observer = new IntersectionObserver(entries => {
@@ -128,7 +130,7 @@ export default function BottonsLanding() {
               <button className="hero-deliverable-arrow hero-deliverable-next" onClick={() => changeSlide(1)} aria-label="Próxima arte"><ArrowRight size={22} /></button>
             </div>
             <div className="hero-deliverable-dots" aria-label="Selecionar prévia">
-              {Array.from({length:8},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}
+              {Array.from({length:HERO_SLIDE_COUNT},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}
             </div>
           </div>
 
@@ -160,7 +162,7 @@ export default function BottonsLanding() {
             <button className="hero-deliverable-arrow hero-deliverable-next" onClick={() => changeSlide(1)} aria-label="Próxima arte"><ArrowRight size={22} /></button>
           </div>
           <div className="hero-deliverable-dots" aria-label="Selecionar prévia">
-            {Array.from({length:8},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}
+            {Array.from({length:HERO_SLIDE_COUNT},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}
           </div>
         </div>
       </section>
