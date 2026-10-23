@@ -195,3 +195,12 @@ h1 span,h2 span{color:#24b3ff}
 .video-testimonials-cta{text-align:center;width:min(760px,100%);margin:28px auto 0}.video-testimonials-cta p{color:#c0ccda;font-size:13px;font-weight:700;margin-bottom:17px}.video-testimonials-cta .button{min-width:min(460px,100%)}
 @media(max-width:800px){.video-testimonials-section{padding-block:68px 64px}.video-testimonials-heading{margin-bottom:30px}.video-testimonials-title-row{align-items:flex-end}.video-testimonials-title-row h3{font-size:22px}.video-testimonial-card{flex-basis:min(72vw,300px)}.video-testimonials-rail{width:calc(100% + 32px);margin-left:0;padding-right:32px}.video-testimonials-cta{margin-top:24px}}
 @media(max-width:540px){.video-testimonials-section{padding-block:56px 52px}.video-testimonials-heading{margin-bottom:25px}.video-testimonials-heading h2{font-size:clamp(30px,9vw,39px)}.video-testimonials-title-row{margin-bottom:18px}.video-testimonials-title-row h3{font-size:20px;max-width:235px}.video-testimonials-arrows button{width:37px;height:37px}.video-testimonials-rail{width:calc(100% + 18px);gap:16px;padding-right:24px}.video-testimonial-card{flex-basis:min(82vw,330px);border-radius:16px}.video-testimonial-footer{min-height:46px;padding-inline:12px}.video-testimonials-cta p{font-size:12px;line-height:1.55}.video-testimonials-cta .button{width:100%;font-size:10px}}
+
+/* FIX: depoimentos em vídeo nunca ficam presos no efeito global reveal */
+.video-testimonials-section,
+.video-testimonials-section .container,
+.video-testimonials-section .container.reveal {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
