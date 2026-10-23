@@ -45,6 +45,13 @@ const socialProof = [
   { image: '/images/bottons/social/05-anime-quarto.webp', label: 'Foto real de cliente', theme: 'Anime', text: 'Cores vivas e arte bem definida para um tema que chama atenção rápido.' },
   { image: '/images/bottons/social/06-anime-jantar.webp', label: 'Foto real de cliente', theme: 'Anime', text: 'Resultado final com aparência profissional e pronto para fotografar e divulgar.' },
 ];
+const testimonialVideos = [
+  { id: 'imd3hizasy', title: 'Depoimento 01' },
+  { id: 'uzw36stx5v', title: 'Depoimento 02' },
+  { id: 'pn274fxcjn', title: 'Depoimento 03' },
+  { id: 'rgzbt6vf72', title: 'Depoimento 04' },
+];
+
 const benefits = [
   { icon: FolderOpen, title: '+5.000 artes prontas', text: 'Uma biblioteca premium para bottons e ímãs, organizada por temas para você encontrar opções rápido.' },
   { icon: Palette, title: 'Edite no Canva Grátis', text: 'Personalize textos, cores e detalhes sem depender de designer ou começar cada pedido do zero.' },
@@ -75,7 +82,13 @@ export default function BottonsLanding() {
   const [sticky, setSticky] = useState(false);
   const modal = useRef<HTMLDialogElement>(null);
   const touchStart = useRef<number | null>(null);
+  const testimonialRail = useRef<HTMLDivElement>(null);
   function changeSlide(direction: number) { setSlide(current => (current + direction + HERO_SLIDE_COUNT) % HERO_SLIDE_COUNT); }
+  function moveTestimonials(direction: number) {
+    const rail = testimonialRail.current;
+    if (!rail) return;
+    rail.scrollBy({ left: direction * Math.max(280, rail.clientWidth * 0.82), behavior: 'smooth' });
+  }
   function closeModal() { modal.current?.close(); }
 
   useEffect(() => {
@@ -230,6 +243,49 @@ export default function BottonsLanding() {
           ))}
         </div>
         <p className="social-proof-note"> Todos bottons acima estao incluso no pack completo.</p>
+      </section>
+
+      <section className="section video-testimonials-section" aria-labelledby="video-testimonials-title">
+        <div className="container">
+          <div className="center-title video-testimonials-heading">
+            <p className="eyebrow">DEPOIMENTOS EM VÍDEO</p>
+            <h2 id="video-testimonials-title">QUEM JÁ COLOCOU A MÁQUINA<br /><span>PARA TRABALHAR.</span></h2>
+            <p>Relatos de clientes que acessaram o acervo e começaram a colocar novas opções para produzir.</p>
+          </div>
+
+          <div className="video-testimonials-title-row">
+            <h3>VEJA O QUE OS CLIENTES ESTÃO DIZENDO</h3>
+            <div className="video-testimonials-arrows" aria-label="Controles do carrossel">
+              <button type="button" onClick={() => moveTestimonials(-1)} aria-label="Depoimento anterior"><ArrowLeft size={20} /></button>
+              <button type="button" onClick={() => moveTestimonials(1)} aria-label="Próximo depoimento"><ArrowRight size={20} /></button>
+            </div>
+          </div>
+
+          <div className="video-testimonials-rail" ref={testimonialRail}>
+            {testimonialVideos.map((video, index) => (
+              <article className="video-testimonial-card" key={video.id}>
+                <div className="video-testimonial-player">
+                  <iframe
+                    src={`https://fast.wistia.net/embed/iframe/${video.id}?seo=false&videoFoam=true`}
+                    title={`${video.title} — Bottons Pro 5K`}
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                </div>
+                <div className="video-testimonial-footer">
+                  <span>RELATO REAL DE CLIENTE</span>
+                  <strong>0{index + 1}</strong>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="video-testimonials-cta">
+            <p>Agora é a sua vez de escolher os modelos e colocar sua máquina para produzir.</p>
+            <CTA>QUERO ACESSAR O BOTTONS PRO 5K COMPLETO</CTA>
+          </div>
+        </div>
       </section>
 
       <section className="section plans-section" id="planos"><div className="container"><div className="center-title"><p className="eyebrow">ESCOLHA O SEU PLANO</p><h2>COMECE PELO STARTER<br /><span>OU LEVE O SISTEMA COMPLETO.</span></h2><p>Pagamento único. Sem mensalidade. {offer.guaranteeDays} dias de garantia.</p></div><div className="plan-grid">
