@@ -45,12 +45,14 @@ const socialProof = [
   { image: '/images/bottons/social/05-anime-quarto.webp', label: 'Foto real de cliente', theme: 'Anime', text: 'Cores vivas e arte bem definida para um tema que chama atenção rápido.' },
   { image: '/images/bottons/social/06-anime-jantar.webp', label: 'Foto real de cliente', theme: 'Anime', text: 'Resultado final com aparência profissional e pronto para fotografar e divulgar.' },
 ];
+/* DEPOIMENTOS EM VÍDEO — temporariamente desativados
 const testimonialVideos = [
   { id: 'imd3hizasy', title: 'Depoimento 01' },
   { id: 'uzw36stx5v', title: 'Depoimento 02' },
   { id: 'pn274fxcjn', title: 'Depoimento 03' },
   { id: 'rgzbt6vf72', title: 'Depoimento 04' },
 ];
+*/
 
 const benefits = [
   { icon: FolderOpen, title: '+5.000 artes prontas', text: 'Uma biblioteca premium para bottons e ímãs, organizada por temas para você encontrar opções rápido.' },
@@ -82,13 +84,15 @@ export default function BottonsLanding() {
   const [sticky, setSticky] = useState(false);
   const modal = useRef<HTMLDialogElement>(null);
   const touchStart = useRef<number | null>(null);
-  const testimonialRail = useRef<HTMLDivElement>(null);
+  // const testimonialRail = useRef<HTMLDivElement>(null); // depoimentos em vídeo desativados
   function changeSlide(direction: number) { setSlide(current => (current + direction + HERO_SLIDE_COUNT) % HERO_SLIDE_COUNT); }
+  /* DEPOIMENTOS EM VÍDEO — temporariamente desativados
   function moveTestimonials(direction: number) {
     const rail = testimonialRail.current;
     if (!rail) return;
     rail.scrollBy({ left: direction * Math.max(280, rail.clientWidth * 0.82), behavior: 'smooth' });
   }
+  */
   function closeModal() { modal.current?.close(); }
 
   useEffect(() => {
@@ -245,6 +249,7 @@ export default function BottonsLanding() {
         <p className="social-proof-note"> Todos bottons acima estao incluso no pack completo.</p>
       </section>
 
+      {/* DEPOIMENTOS EM VÍDEO — TEMPORARIAMENTE DESATIVADOS
       <section className="section video-testimonials-section" aria-labelledby="video-testimonials-title">
         <div className="container">
           <div className="center-title video-testimonials-heading">
@@ -287,6 +292,8 @@ export default function BottonsLanding() {
           </div>
         </div>
       </section>
+
+      */}
 
       <section className="section plans-section" id="planos"><div className="container"><div className="center-title"><p className="eyebrow">ESCOLHA O SEU PLANO</p><h2>COMECE PELO STARTER<br /><span>OU LEVE O SISTEMA COMPLETO.</span></h2><p>Pagamento único. Sem mensalidade. {offer.guaranteeDays} dias de garantia.</p></div><div className="plan-grid">
         <article className="plan starter"><p className="plan-kicker">STARTER</p><h3>PACK REDUZIDO</h3><p className="plan-description">Para conhecer uma parte do material e começar pelo essencial.</p><div className="plan-price"><strong>{money(offer.basic.price)}</strong></div><p className="micro">pagamento único</p><Checks items={['Pack reduzido de artes','Artes editáveis no Canva Grátis','Acesso digital','Garantia de 30 dias']} /><ul className="not-included"><li><X size={16} /> Sem biblioteca completa de +5.000 artes</li><li><X size={16} /> Sem Curso Bottons do Zero</li><li><X size={16} /> Sem Calculadora e Guia</li><li><X size={16} /> Sem bônus e atualizações</li></ul><button className="button button-outline" onClick={() => modal.current?.showModal()}>COMEÇAR PELO STARTER<ArrowRight size={18} /></button><span className="secure"><ShieldCheck size={14} /> Compra em checkout externo</span></article>
