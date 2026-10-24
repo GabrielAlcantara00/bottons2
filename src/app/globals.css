@@ -156,9 +156,9 @@ h1 span,h2 span{color:#24b3ff}
 .social-proof-heading{margin-bottom:34px}.social-proof-heading>p:last-child{max-width:660px}
 .social-proof-vertical{width:min(760px,calc(100% - 32px));height:760px;margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;overflow:hidden;position:relative;mask-image:linear-gradient(180deg,transparent,#000 7%,#000 93%,transparent);-webkit-mask-image:linear-gradient(180deg,transparent,#000 7%,#000 93%,transparent)}
 .social-proof-lane{min-width:0;overflow:hidden}
-.social-proof-lane-track{display:flex;flex-direction:column;gap:18px;will-change:transform;animation:socialProofUp 34s linear infinite}
-.social-proof-lane.is-reverse .social-proof-lane-track{animation-name:socialProofDown;animation-duration:38s}
-.social-proof-vertical:hover .social-proof-lane-track{animation-play-state:paused}
+.social-proof-lane-track{display:flex;flex-direction:column;gap:18px;will-change:transform;animation:socialProofUp 34s linear infinite;animation-play-state:paused}
+.social-proof-lane.is-reverse .social-proof-lane-track{animation-name:socialProofDown;animation-duration:38s}.social-proof-vertical.is-running .social-proof-lane-track{animation-play-state:running}
+.social-proof-vertical.is-running:hover .social-proof-lane-track{animation-play-state:paused}
 .social-proof-card{overflow:hidden;border:1px solid #223149;border-radius:18px;background:linear-gradient(180deg,#0f1722,#0a1018);box-shadow:0 22px 55px #0007}
 .social-proof-image{position:relative;overflow:hidden;background:#06090e;aspect-ratio:4/5}
 .social-proof-image img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}.social-proof-card:hover .social-proof-image img{transform:scale(1.025)}
@@ -175,9 +175,9 @@ h1 span,h2 span{color:#24b3ff}
 .options-section{overflow:hidden}
 .options-marquee{display:grid;gap:18px;overflow:hidden;position:relative;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .options-marquee-row{overflow:hidden}
-.options-marquee-track{display:flex;gap:18px;width:max-content;will-change:transform;animation:optionsRowLeft 34s linear infinite}
-.options-marquee-row.is-reverse .options-marquee-track{animation-name:optionsRowRight;animation-duration:38s}
-.options-marquee:hover .options-marquee-track{animation-play-state:paused}
+.options-marquee-track{display:flex;gap:18px;width:max-content;will-change:transform;animation:optionsRowLeft 34s linear infinite;animation-play-state:paused}
+.options-marquee-row.is-reverse .options-marquee-track{animation-name:optionsRowRight;animation-duration:38s}.options-marquee.is-running .options-marquee-track{animation-play-state:running}
+.options-marquee.is-running:hover .options-marquee-track{animation-play-state:paused}
 .option-shot{flex:0 0 clamp(220px,24vw,285px);overflow:hidden;border-radius:18px;border:1px solid #13243b;background:#0a1018;box-shadow:0 20px 50px #02060e24}
 .option-shot img{width:100%;height:auto;display:block}
 @keyframes optionsRowLeft{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 9px))}}
@@ -204,3 +204,6 @@ h1 span,h2 span{color:#24b3ff}
   visibility: visible !important;
   transform: none !important;
 }
+
+/* Performance: seções pesadas abaixo da dobra só são renderizadas quando se aproximam da viewport. */
+.options-section,.social-proof-section,.plans-section,.faq-section{content-visibility:auto;contain-intrinsic-size:auto 900px}
