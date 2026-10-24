@@ -96,17 +96,46 @@ export default function BottonsLanding() {
   function closeModal() { modal.current?.close(); }
 
   useEffect(() => {
-    const timer = window.setInterval(() => setSlide(current => (current + 1) % HERO_SLIDE_COUNT), 4200);
-    const revealTargets = Array.from(document.querySelectorAll<HTMLElement>('section .container, .hero-copy, .hero-deliverable, .format-content, .plan, .guarantee > *, .final-section .container'));
+    // Mantém o primeiro slide estável durante o carregamento crítico. O autoplay
+    // começa depois, evitando disputar banda/CPU com o LCP no mobile.
+    let timer: number | undefined;
+    const autoplayDelay = window.setTimeout(() => {
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        timer = window.setInterval(() => setSlide(current => (current + 1) % HERO_SLIDE_COUNT), 4200);
+      }
+    }, 6000);
+
+    // O hero fica visível imediatamente. Não aplicamos reveal nele para não
+    // atrasar o maior conteúdo visível (LCP) esperando a hidratação.
+    const revealTargets = Array.from(document.querySelectorAll<HTMLElement>('section .container, .format-content, .plan, .guarantee > *, .final-section .container'));
     revealTargets.forEach(el => el.classList.add('reveal'));
     const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     revealTargets.forEach(el => observer.observe(el));
+
+    // Pausa os carrosséis infinitos enquanto estão fora da tela.
+    const motionTargets = Array.from(document.querySelectorAll<HTMLElement>('.options-marquee, .social-proof-vertical'));
+    const motionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => entry.target.classList.toggle('is-running', entry.isIntersecting));
+    }, { rootMargin: '240px 0px', threshold: 0.01 });
+    motionTargets.forEach(el => motionObserver.observe(el));
+
     const onScroll = () => setSticky(window.scrollY > 760);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => { window.clearInterval(timer); observer.disconnect(); window.removeEventListener('scroll', onScroll); };
+    return () => {
+      window.clearTimeout(autoplayDelay);
+      if (timer) window.clearInterval(timer);
+      observer.disconnect();
+      motionObserver.disconnect();
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
   return <>
     <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
