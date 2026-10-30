@@ -74,6 +74,7 @@ const questions = [
   ['Como funciona a garantia?', 'A oferta tem garantia de 30 dias. Se não ficar satisfeito, solicite o reembolso dentro desse prazo pelo canal indicado na compra.'],
 ];
 type WistiaPlayerElement = HTMLElement & {
+  currentTime: number;
   muted: boolean;
   volume: number;
   play?: () => Promise<void> | void;
@@ -87,6 +88,8 @@ function HeroVsl() {
     const player = playerRef.current;
     if (!player) return;
 
+    // Ao ativar o áudio, reinicia a VSL para a pessoa ouvir desde o começo.
+    player.currentTime = 0;
     player.muted = false;
     player.volume = 1;
     try {
