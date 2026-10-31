@@ -207,31 +207,3 @@ h1 span,h2 span{color:#24b3ff}
 
 /* Performance: seções pesadas abaixo da dobra só são renderizadas quando se aproximam da viewport. */
 .options-section,.social-proof-section,.plans-section,.faq-section{content-visibility:auto;contain-intrinsic-size:auto 900px}
-
-/* HERO VSL — substitui o antigo carrossel de artes */
-.bottons-hero{grid-template-columns:minmax(0,1fr) minmax(300px,430px);grid-template-areas:"copy media" "actions media";column-gap:42px;row-gap:0;align-items:center}
-.hero-copy-main{grid-area:copy}
-.hero-actions{grid-area:actions;align-self:start;margin-top:22px;min-width:0}
-.hero-actions .hero-chips{margin-top:0}
-.hero-vsl{grid-area:media;width:min(100%,360px);justify-self:center;align-self:center;min-width:0}
-.hero-vsl-shell{position:relative;width:100%;overflow:hidden;border:1px solid #203149;border-radius:20px;background:#05090f;box-shadow:0 28px 70px rgba(0,0,0,.34)}
-.hero-vsl-shell wistia-player{display:block;width:100%;aspect-ratio:9/16}
-wistia-player[media-id='ovi6ulxjup']:not(:defined){background:center/contain no-repeat url('https://fast.wistia.com/embed/medias/ovi6ulxjup/swatch');display:block;filter:blur(4px);padding-top:177.78%}
-.hero-vsl-sound{position:absolute;left:50%;top:52%;z-index:6;display:flex;min-width:220px;transform:translate(-50%,-50%);flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid rgba(255,255,255,.25);border-radius:16px;background:rgba(6,12,20,.88);padding:14px 20px;color:#fff;box-shadow:0 14px 38px rgba(0,0,0,.42);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);transition:transform .18s ease,background .18s ease}
-.hero-vsl-sound:hover{transform:translate(-50%,-50%) scale(1.035);background:rgba(4,15,28,.94)}
-.hero-vsl-sound-icon{font-size:24px;line-height:1}
-.hero-vsl-sound strong{font-size:12px;letter-spacing:.04em}
-.hero-vsl-sound small{font-size:9px;color:#b9c9dc;font-weight:600}
-
-@media(max-width:800px){
-  .bottons-hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"copy" "media" "actions";gap:0}
-  .hero-vsl{width:min(100%,360px);margin:22px auto 0}
-  .hero-actions{width:100%;margin-top:17px}
-}
-@media(max-width:540px){
-  .hero-vsl{width:min(100%,330px);margin-top:20px}
-  .hero-vsl-shell{border-radius:16px}
-  .hero-vsl-sound{min-width:195px;padding:12px 16px;border-radius:14px}
-  .hero-vsl-sound strong{font-size:11px}
-  .hero-vsl-sound small{font-size:8px}
-}
