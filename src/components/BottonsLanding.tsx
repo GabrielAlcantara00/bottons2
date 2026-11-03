@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
-import { ArrowRight, ArrowLeft, Check, X, ScanLine, FolderOpen, Layers, GraduationCap, Calculator, ShoppingBag, ShieldCheck, Download, ChevronDown, Palette, Gift, Clock3 } from 'lucide-react';
+import { ArrowRight, Check, X, ScanLine, FolderOpen, Layers, GraduationCap, Calculator, ShoppingBag, ShieldCheck, Download, ChevronDown, Palette, Gift, Clock3 } from 'lucide-react';
 import PriceCalculator from './PriceCalculator';
 import { offer, money, checkoutUrl } from '@/config/offer';
 
-const HERO_SLIDE_COUNT = 12;
 
 const bonuses = [
   { title: '50 Artes Cristãs', image: 'bonus-cristas.webp', text: 'Temas cristãos e inspiracionais para eventos, retiros e presentes.' },
@@ -79,13 +78,10 @@ function Buy({ plan, children, secondary = false }: { plan: 'basic' | 'complete'
   return <a className={secondary ? 'starter-continue' : 'button button-primary'} href={offer[plan].checkout} onClick={event => { event.currentTarget.href = checkoutUrl(offer[plan].checkout); }}>{children}<ArrowRight size={18} /></a>;
 }
 export default function BottonsLanding() {
-  const [slide, setSlide] = useState(0);
   const [faq, setFaq] = useState<number | null>(0);
   const [sticky, setSticky] = useState(false);
   const modal = useRef<HTMLDialogElement>(null);
-  const touchStart = useRef<number | null>(null);
   // const testimonialRail = useRef<HTMLDivElement>(null); // depoimentos em vídeo desativados
-  function changeSlide(direction: number) { setSlide(current => (current + direction + HERO_SLIDE_COUNT) % HERO_SLIDE_COUNT); }
   /* DEPOIMENTOS EM VÍDEO — temporariamente desativados
   function moveTestimonials(direction: number) {
     const rail = testimonialRail.current;
@@ -96,15 +92,6 @@ export default function BottonsLanding() {
   function closeModal() { modal.current?.close(); }
 
   useEffect(() => {
-    // Mantém o primeiro slide estável durante o carregamento crítico. O autoplay
-    // começa depois, evitando disputar banda/CPU com o LCP no mobile.
-    let timer: number | undefined;
-    const autoplayDelay = window.setTimeout(() => {
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        timer = window.setInterval(() => setSlide(current => (current + 1) % HERO_SLIDE_COUNT), 4200);
-      }
-    }, 6000);
-
     // O hero fica visível imediatamente. Não aplicamos reveal nele para não
     // atrasar o maior conteúdo visível (LCP) esperando a hidratação.
     const revealTargets = Array.from(document.querySelectorAll<HTMLElement>('section .container, .format-content, .plan, .guarantee > *, .final-section .container'));
@@ -130,8 +117,6 @@ export default function BottonsLanding() {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
-      window.clearTimeout(autoplayDelay);
-      if (timer) window.clearInterval(timer);
       observer.disconnect();
       motionObserver.disconnect();
       window.removeEventListener('scroll', onScroll);
@@ -140,76 +125,30 @@ export default function BottonsLanding() {
   return <>
     <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
     <div className="announcement"><span>OPORTUNIDADE COM BOTTONS E ÍMÃS PERSONALIZADOS</span><span className="announcement-sep">/</span><span>PAGAMENTO ÚNICO · ACESSO IMEDIATO</span></div>
-    <header className="header container">
-      <a href="#" className="brand" aria-label="Bottons Pro 5K"><span className="brand-icon"><Palette /></span><span>BOTTONS<span className="brand-pro">PRO</span><small>BIBLIOTECA 5K</small></span></a>
-      <nav aria-label="Menu principal"><a href="#acervo">As artes</a><a href="#curso">Curso e ferramentas</a><a href="#planos">Planos</a></nav>
-      <a className="nav-cta" href="#planos">QUERO AS ARTES<ArrowRight size={16} /></a>
-    </header>
     <main id="conteudo">
       <section className="hero container bottons-hero">
-        <div className="hero-copy"><div className="eyebrow"><span className="short-line" /> +5.000 ARTES + CURSO + FERRAMENTAS</div>
+        <div className="hero-copy">
+          <div className="eyebrow"><span className="short-line" /> +5.000 ARTES + CURSO + FERRAMENTAS</div>
           <h1>TRANSFORME SUA MÁQUINA DE BOTTONS EM UMA <span>FÁBRICA DE PERSONALIZADOS.</span></h1>
+
+          <div className="hero-mockup-wrap">
+            <div className="hero-mockup-glow" aria-hidden="true" />
+            <Image
+              src="/images/bottons/hero-mockup.webp"
+              width={1080}
+              height={720}
+              alt="Mockup do Bottons Pro 5K com biblioteca de artes, curso, ferramentas e bônus"
+              priority
+              sizes="(max-width: 800px) calc(100vw - 36px), 820px"
+              className="hero-mockup-image"
+            />
+          </div>
+
           <p className="hero-description">Você já tem a máquina. Agora tenha uma biblioteca com milhares de artes, treinamento e ferramentas para escolher o nicho, personalizar, precificar e colocar seus produtos para rodar. <strong>Sem começar cada pedido do zero.</strong></p>
 
-          <div className="hero-deliverable hero-deliverable-mobile" aria-roledescription="carrossel" aria-label="Prévias da biblioteca de artes">
-            <div
-              className="hero-deliverable-stage"
-              onTouchStart={e => { touchStart.current = e.touches[0].clientX; }}
-              onTouchEnd={e => {
-                if (touchStart.current !== null) {
-                  const diff = e.changedTouches[0].clientX - touchStart.current;
-                  if (Math.abs(diff) > 40) changeSlide(diff < 0 ? 1 : -1);
-                  touchStart.current = null;
-                }
-              }}
-            >
-              <Image
-                src={'/images/bottons/slide-' + (slide + 1) + '.webp'}
-                width={700}
-                height={900}
-                alt={'Prévia ' + (slide + 1) + ' da biblioteca com artes para bottons e ímãs'}
-                priority={slide === 0}
-                sizes="calc(100vw - 36px)"
-                className="hero-deliverable-image"
-              />
-              <button className="hero-deliverable-arrow hero-deliverable-prev" onClick={() => changeSlide(-1)} aria-label="Arte anterior"><ArrowLeft size={22} /></button>
-              <button className="hero-deliverable-arrow hero-deliverable-next" onClick={() => changeSlide(1)} aria-label="Próxima arte"><ArrowRight size={22} /></button>
-            </div>
-            <div className="hero-deliverable-dots" aria-label="Selecionar prévia">
-              {Array.from({length:HERO_SLIDE_COUNT},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}
-            </div>
-          </div>
-
           <div className="hero-chips"><span><Check size={15} /> +5.000 artes</span><span><Check size={15} /> Canva Grátis</span><span><Check size={15} /> Curso incluso no PRO</span></div>
-          <CTA>QUERO COLOCAR MINHA MÁQUINA PARA PRODUZIR</CTA><p className="micro hero-price">Planos a partir de <strong>{money(offer.basic.price)}</strong><span>•</span>{offer.guaranteeDays} dias de garantia</p>
-        </div>
-        <div className="hero-deliverable hero-deliverable-desktop" aria-roledescription="carrossel" aria-label="Prévias da biblioteca de artes">
-          <div
-            className="hero-deliverable-stage"
-            onTouchStart={e => { touchStart.current = e.touches[0].clientX; }}
-            onTouchEnd={e => {
-              if (touchStart.current !== null) {
-                const diff = e.changedTouches[0].clientX - touchStart.current;
-                if (Math.abs(diff) > 40) changeSlide(diff < 0 ? 1 : -1);
-                touchStart.current = null;
-              }
-            }}
-          >
-            <Image
-              src={'/images/bottons/slide-' + (slide + 1) + '.webp'}
-              width={700}
-              height={900}
-              alt={'Prévia ' + (slide + 1) + ' da biblioteca com artes para bottons e ímãs'}
-              priority={slide === 0}
-              sizes="(max-width: 800px) calc(100vw - 36px), 520px"
-              className="hero-deliverable-image"
-            />
-            <button className="hero-deliverable-arrow hero-deliverable-prev" onClick={() => changeSlide(-1)} aria-label="Arte anterior"><ArrowLeft size={22} /></button>
-            <button className="hero-deliverable-arrow hero-deliverable-next" onClick={() => changeSlide(1)} aria-label="Próxima arte"><ArrowRight size={22} /></button>
-          </div>
-          <div className="hero-deliverable-dots" aria-label="Selecionar prévia">
-            {Array.from({length:HERO_SLIDE_COUNT},(_,i) => <button key={i} aria-label={'Ver prévia ' + (i+1)} aria-current={slide === i ? 'true' : undefined} className={slide === i ? 'active' : ''} onClick={() => setSlide(i)} />)}
-          </div>
+          <CTA>QUERO COLOCAR MINHA MÁQUINA PARA PRODUZIR</CTA>
+          <p className="micro hero-price">Planos a partir de <strong>{money(offer.basic.price)}</strong><span>•</span>{offer.guaranteeDays} dias de garantia</p>
         </div>
       </section>
       <div className="format-strip"><div className="container format-content"><span>+5.000 ARTES · QUATRO TAMANHOS</span><div>3,2<i />3,8<i />4,4<i />5,8 <small>cm</small></div><p>Escolha. Edite. Produza.</p></div></div>
