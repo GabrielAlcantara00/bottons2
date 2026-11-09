@@ -75,11 +75,16 @@ const questions = [
 function CTA({ children = 'QUERO MINHAS ARTES AGORA' }: { children?: ReactNode }) { return <a href="#planos" className="button button-primary">{children}<ArrowRight size={19} /></a>; }
 function Checks({ items }: { items: string[] }) { return <ul className="checks">{items.map(item => <li key={item}><Check size={18} /><span>{item}</span></li>)}</ul>; }
 function Buy({ plan, children, secondary = false }: { plan: 'basic' | 'complete' | 'upgrade'; children: ReactNode; secondary?: boolean }) {
-  return <a className={secondary ? 'starter-continue' : 'button button-primary'} href={offer[plan].checkout} onClick={event => { event.currentTarget.href = checkoutUrl(offer[plan].checkout); }}>{children}<ArrowRight size={18} /></a>;
+  return <a className={secondary ? 'starter-continue' : 'button button-primary'} href={offer[plan].checkout} onClick={event => { sessionStorage.setItem('bottons-checkout-clicked', '1'); event.currentTarget.href = checkoutUrl(offer[plan].checkout); }}>{children}<ArrowRight size={18} /></a>;
 }
 export default function BottonsLanding() {
   const [faq, setFaq] = useState<number | null>(0);
   const [sticky, setSticky] = useState(false);
+  const [exitOpen, setExitOpen] = useState(false);
+  const [exitSpinning, setExitSpinning] = useState(false);
+  const [exitWon, setExitWon] = useState(false);
+  const [exitRotation, setExitRotation] = useState(0);
+  const exitShown = useRef(false);
   const modal = useRef<HTMLDialogElement>(null);
   // const testimonialRail = useRef<HTMLDivElement>(null); // depoimentos em vídeo desativados
   /* DEPOIMENTOS EM VÍDEO — temporariamente desativados
@@ -89,6 +94,37 @@ export default function BottonsLanding() {
     rail.scrollBy({ left: direction * Math.max(280, rail.clientWidth * 0.82), behavior: 'smooth' });
   }
   */
+  function openExitOffer() {
+    if (exitShown.current || sessionStorage.getItem('bottons-exit-offer-seen') === '1') return;
+    if (sessionStorage.getItem('bottons-checkout-clicked') === '1') return;
+    exitShown.current = true;
+    sessionStorage.setItem('bottons-exit-offer-seen', '1');
+    setExitWon(false);
+    setExitSpinning(false);
+    setExitRotation(0);
+    setExitOpen(true);
+  }
+
+  function closeExitOffer() {
+    setExitOpen(false);
+  }
+
+  function spinExitWheel() {
+    if (exitSpinning || exitWon) return;
+    setExitSpinning(true);
+    // O Premium R$19,90 ocupa o 3º setor (centro em 60°).
+    // O ponteiro fica em -90°. 7 voltas + 210° coloca o centro do Premium exatamente no ponteiro.
+    setExitRotation(7 * 360 + 210);
+    window.setTimeout(() => {
+      setExitSpinning(false);
+      setExitWon(true);
+    }, 5000);
+  }
+
+  function markCheckoutClick() {
+    sessionStorage.setItem('bottons-checkout-clicked', '1');
+  }
+
   function closeModal() { modal.current?.close(); }
 
   useEffect(() => {
@@ -113,12 +149,37 @@ export default function BottonsLanding() {
     }, { rootMargin: '240px 0px', threshold: 0.01 });
     motionTargets.forEach(el => motionObserver.observe(el));
 
+    // Exit intent desktop: mouse saindo pelo topo da janela.
+    const onMouseOut = (event: MouseEvent) => {
+      if (event.clientY <= 0 && !event.relatedTarget) openExitOffer();
+    };
+    document.addEventListener('mouseout', onMouseOut);
+
+    // Mobile: depois que a pessoa realmente explorou a página, uma sequência de scroll para cima
+    // funciona como sinal de possível saída sem sequestrar o botão voltar do navegador.
+    let lastY = window.scrollY;
+    let upwardMoves = 0;
+    const mobileStartedAt = Date.now();
+    const onMobileExitIntent = () => {
+      if (window.innerWidth > 800) return;
+      const y = window.scrollY;
+      const doc = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const progress = y / doc;
+      if (y < lastY - 18) upwardMoves += 1;
+      else if (y > lastY + 8) upwardMoves = 0;
+      if (Date.now() - mobileStartedAt > 9000 && progress < 0.38 && upwardMoves >= 4) openExitOffer();
+      lastY = y;
+    };
+    window.addEventListener('scroll', onMobileExitIntent, { passive: true });
+
     const onScroll = () => setSticky(window.scrollY > 760);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       observer.disconnect();
       motionObserver.disconnect();
+      document.removeEventListener('mouseout', onMouseOut);
+      window.removeEventListener('scroll', onMobileExitIntent);
       window.removeEventListener('scroll', onScroll);
     };
   }, []);
@@ -276,6 +337,62 @@ export default function BottonsLanding() {
     </main>
     <footer className="footer container"><div className="footer-top"><a className="brand" href="#"><span className="brand-icon"><Palette /></span><span>BOTTONS<span className="brand-pro">PRO</span><small>BIBLIOTECA 5K</small></span></a><nav aria-label="Informações"><a href="#duvidas">Dúvidas</a><a href="#planos">Planos</a><a href="/guia-bottons-imas.html">Guia prático</a></nav></div><p>Produto 100% digital. Bottons, ímãs físicos, equipamentos e insumos não incluídos. Confira direitos e licenças de cada arte antes da produção comercial. Resultados dependem do produto, do preço, da execução e da divulgação.</p><div className="footer-bottom"><span>© {new Date().getFullYear()} Bottons Pro 5K.</span><span>BOTTONS & ÍMÃS.</span></div></footer>
     <div className={'sticky-offer '+(sticky?'visible':'')}><div><span>BOTTONS PRO 5K</span><strong>{money(offer.complete.price)}<small>pagamento único</small></strong></div><a href="#planos">VER PLANOS<ArrowRight size={17} /></a></div>
+    {exitOpen && <div className="exit-wheel-overlay" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) closeExitOffer(); }}>
+      <section className="exit-wheel-modal" role="dialog" aria-modal="true" aria-labelledby="exit-wheel-title">
+        <button type="button" className="exit-wheel-close" aria-label="Fechar oferta" onClick={closeExitOffer}><X size={24} /></button>
+
+        {!exitWon ? <>
+          <div className="exit-wheel-head">
+            <span className="exit-wheel-badge">⚡ OFERTA DE SAÍDA DESBLOQUEADA</span>
+            <h2 id="exit-wheel-title">EI, ESPERE! <span>REVELE SUA CONDIÇÃO ESPECIAL.</span></h2>
+            <p>Antes de sair, gire a roleta promocional e revele a condição liberada para o Bottons Pro 5K.</p>
+          </div>
+
+          <div className="exit-wheel-stage">
+            <div className="exit-wheel-glow" aria-hidden="true" />
+            <div className="exit-wheel-pointer" aria-hidden="true" />
+            <svg className="exit-wheel-svg" viewBox="0 0 400 400" aria-label="Roleta promocional" style={{ transform: `rotate(${exitRotation}deg)` }}>
+              <g>
+                <path d="M200 200 L200 10 A190 190 0 0 1 364.545 105 Z" fill="#0b94dd" />
+                <path d="M200 200 L364.545 105 A190 190 0 0 1 364.545 295 Z" fill="#0d2b49" />
+                <path d="M200 200 L364.545 295 A190 190 0 0 1 200 390 Z" fill="#18b6ff" />
+                <path d="M200 200 L200 390 A190 190 0 0 1 35.455 295 Z" fill="#0b2036" />
+                <path d="M200 200 L35.455 295 A190 190 0 0 1 35.455 105 Z" fill="#126bb0" />
+                <path d="M200 200 L35.455 105 A190 190 0 0 1 200 10 Z" fill="#07578c" />
+                <circle cx="200" cy="200" r="188" fill="none" stroke="#dff6ff" strokeWidth="8" />
+                <circle cx="200" cy="200" r="61" fill="#07111f" stroke="#e6f8ff" strokeWidth="7" />
+
+                <g className="exit-wheel-label"><text x="262" y="93" textAnchor="middle"><tspan x="262" dy="0">BÔNUS</tspan><tspan x="262" dy="19">EXTRA</tspan></text></g>
+                <g className="exit-wheel-label"><text x="330" y="197" textAnchor="middle"><tspan x="330" dy="0">PLANO</tspan><tspan x="330" dy="19">R$24,90</tspan></text></g>
+                <g className="exit-wheel-label exit-wheel-label-premium"><text x="265" y="308" textAnchor="middle"><tspan x="265" dy="0">PREMIUM</tspan><tspan x="265" dy="19">R$19,90</tspan></text></g>
+                <g className="exit-wheel-label"><text x="135" y="308" textAnchor="middle"><tspan x="135" dy="0">PLANO</tspan><tspan x="135" dy="19">R$27,00</tspan></text></g>
+                <g className="exit-wheel-label"><text x="70" y="197" textAnchor="middle"><tspan x="70" dy="0">5%</tspan><tspan x="70" dy="19">OFF</tspan></text></g>
+                <g className="exit-wheel-label"><text x="138" y="93" textAnchor="middle"><tspan x="138" dy="0">PLANO</tspan><tspan x="138" dy="19">R$22,90</tspan></text></g>
+                <text x="200" y="207" textAnchor="middle" className="exit-wheel-center-text">5K</text>
+              </g>
+            </svg>
+          </div>
+
+          <div className="exit-wheel-actions">
+            <button type="button" className="exit-wheel-spin" onClick={spinExitWheel} disabled={exitSpinning}>{exitSpinning ? 'GIRANDO...' : 'GIRAR MINHA ROLETA 🎁'}</button>
+            <small>Roleta promocional desta sessão.</small>
+          </div>
+        </> : <div className="exit-wheel-win">
+          <div className="exit-confetti" aria-hidden="true">{Array.from({ length: 14 }).map((_, index) => <i key={index} />)}</div>
+          <div className="exit-wheel-win-icon">🎉</div>
+          <h2>PARABÉNS! VOCÊ <span>DESBLOQUEOU O PREMIUM.</span></h2>
+          <p>Leve o Bottons Pro 5K completo com a condição especial liberada nesta sessão.</p>
+          <div className="exit-wheel-offer-card">
+            <span>PLANO PREMIUM · OFERTA DE SAÍDA</span>
+            <del>{money(offer.complete.price)}</del>
+            <strong>{money(offer.upgrade.price)}</strong>
+            <b>VOCÊ ECONOMIZA {money(offer.complete.price - offer.upgrade.price)}</b>
+          </div>
+          <a className="exit-wheel-claim" href={offer.upgrade.checkout} onClick={event => { markCheckoutClick(); event.currentTarget.href = checkoutUrl(offer.upgrade.checkout); }}>QUERO APROVEITAR {money(offer.upgrade.price)} <ArrowRight size={19} /></a>
+          <button type="button" className="exit-wheel-decline" onClick={closeExitOffer}>Não, obrigado. Quero sair.</button>
+        </div>}
+      </section>
+    </div>}
     <dialog className="upgrade-dialog" ref={modal} aria-labelledby="upgrade-title" onClick={e => {if(e.target===e.currentTarget)closeModal();}}><div className="upgrade-inner"><button className="modal-close" aria-label="Fechar comparação" onClick={closeModal}><X size={22} /></button><span className="icon-box"><Gift size={28} /></span><p className="eyebrow">CONDIÇÃO DE UPGRADE</p><h2 id="upgrade-title">LEVE TAMBÉM<br /><span>TODOS OS BÔNUS.</span></h2><p>Por <strong>{money(offer.upgrade.price-offer.basic.price)} a mais</strong> que o Básico, escolha o Completo por <strong>{money(offer.upgrade.price)}</strong>.</p><Checks items={['Biblioteca completa com +5.000 artes','Curso Bottons do Zero + calculadora + guia','Bônus, atualizações e suporte prioritário']} /><Buy plan="upgrade">QUERO O COMPLETO POR {money(offer.upgrade.price)}</Buy><Buy plan="basic" secondary>Continuar com o Básico por {money(offer.basic.price)}</Buy><span className="secure"><ShieldCheck size={14} /> Os dois planos têm 30 dias de garantia.</span></div></dialog>
   </>;
 }
