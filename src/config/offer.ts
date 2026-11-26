@@ -6,17 +6,17 @@ export const offer = {
 
   basic: {
     price: 10,
-    checkout: 'https://vopax.com.br/c/6fb0159f-8966-4088-b347-b48e8450e548'
+    checkout: 'https://ggcheckout.app/checkout/v5/JbDyvVTIlpU5UxqePUK34r'
   },
 
   complete: {
     price: 27.0,
-    checkout: 'https://vopax.com.br/c/cd24dd4a-bf33-4d38-b940-b4ff5016a1b9'
+    checkout: 'https://ggcheckout.app/checkout/v5/mQgV0YPVZISWfgdiKWhis9'
   },
 
   upgrade: {
     price: 19.9,
-    checkout: 'https://vopax.com.br/c/887fada2-33e1-4ff8-8901-d7b7898e6b11'
+    checkout: 'https://ggcheckout.app/checkout/v5/sSwnRhWC7SPaL1Sw78sjWI'
   },
 };
 
